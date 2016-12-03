@@ -1,7 +1,14 @@
 <?php
+if (!isset($_GET['q'])) {
+    $id = 1;
+} else 
+$id = $_GET['q'];
 $sqlite = new SQLite3('data/data.sqlite');
-$statement = $sqlite->prepare('select * from clue');
+$statement = $sqlite->prepare('select * from clue where id = :id');
+$statement->bindValue(':id', $id, SQLITE3_INTEGER);
 $result = $statement->execute();
+$row = $result->fetchArray(SQLITE3_ASSOC);
+$sqlite->close();
 ?>
 
 <!DOCTYPE html>
@@ -20,25 +27,25 @@ $result = $statement->execute();
 <body>
   <nav class="navbar navbar-fixed-top navbar-inverse">
     <div class="container">
-      <a href="/list.php" class="navbar-text pull-right" style="margin-right: 15px; text-decoration: none;">简略</a>
+      <a href="/" class="navbar-text pull-right" style="margin-right: 15px; text-decoration: none;">返回</a>
       <a class="navbar-brand" href="#">死穿白</a>
-      <p class="navbar-text text-center" style="margin-right: 15px; text-decoration: none;">所有线索</p>
     </div>
   </nav>
   <div class="container" style="margin-top: 70px;">
-    <?php while ($row = $result->fetchArray(SQLITE3_ASSOC)) : ?>
+    <?php if ($id > 1) : ?>
+    <a class="btn btn-default" href="clue.php?q=<?php echo $id - 1; ?>">Prev</a>
+    <?php endif; ?>
+    <span> <?php echo $id; ?> / 56 </span>
+    <?php if ($id < 56) : ?>
+    <a class="btn btn-default" href="clue.php?q=<?php echo $id + 1; ?>">Next</a>
+    <?php endif; ?>
     <div class="clue"> 
-      <h3><span class="glyphicon glyphicon-search"></span> <a href="/clue.php?q=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a></h3>
-      <div>
-        <?php if ($row['img']) : ?>
-        <img src="img/clue/<?php echo $row['img']; ?>" style="height: 110px; float: left; margin-right: 15px;">
-        <?php endif; ?>
-        <div style="<?php if ($row['img']) { echo 'min-height: 110px;'; } ?>max-height: 110px; overflow: hidden;">
-          <p><?php echo str_replace("\n", '</p><p>', $row['content']); ?></p>
-        </div>
-      </div>
+      <h3><span class="glyphicon glyphicon-search"></span> <?php echo $row['title']; ?></h3>
+      <p><?php echo str_replace("\n", '</p><p>', $row['content']); ?></p>
+      <?php if ($row['img']) : ?>
+      <img src="img/clue/<?php echo $row['img']; ?>">
+      <?php endif; ?>
     </div>
-    <?php endwhile; $sqlite->close(); ?>
     <hr>
     <footer>
       <div>Site by Infinity @ BJTU</div>

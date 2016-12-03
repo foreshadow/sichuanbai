@@ -20,7 +20,7 @@ $result = $statement->execute();
 <body>
   <nav class="navbar navbar-fixed-top navbar-inverse">
     <div class="container">
-      <a href="/list.php" class="navbar-text pull-right" style="margin-right: 15px; text-decoration: none;">简略</a>
+      <a href="/" class="navbar-text pull-right" style="margin-right: 15px; text-decoration: none;">详细</a>
       <a class="navbar-brand" href="#">死穿白</a>
       <p class="navbar-text text-center" style="margin-right: 15px; text-decoration: none;">所有线索</p>
     </div>
@@ -28,15 +28,7 @@ $result = $statement->execute();
   <div class="container" style="margin-top: 70px;">
     <?php while ($row = $result->fetchArray(SQLITE3_ASSOC)) : ?>
     <div class="clue"> 
-      <h3><span class="glyphicon glyphicon-search"></span> <a href="/clue.php?q=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a></h3>
-      <div>
-        <?php if ($row['img']) : ?>
-        <img src="img/clue/<?php echo $row['img']; ?>" style="height: 110px; float: left; margin-right: 15px;">
-        <?php endif; ?>
-        <div style="<?php if ($row['img']) { echo 'min-height: 110px;'; } ?>max-height: 110px; overflow: hidden;">
-          <p><?php echo str_replace("\n", '</p><p>', $row['content']); ?></p>
-        </div>
-      </div>
+      <p><span class="glyphicon glyphicon-search"></span> <a href="/clue.php?q=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a></p>
     </div>
     <?php endwhile; $sqlite->close(); ?>
     <hr>

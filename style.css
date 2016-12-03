@@ -1,0 +1,14 @@
+.clue {
+    font-family: microsoft yahei;
+}
+
+.clue img {
+    max-width: 100%; 
+    border-style: ridge; 
+    border-color: gray; 
+    border-width: 6px;
+}
+ .clue >p {
+     font-size: 20px;
+ }
+ 
